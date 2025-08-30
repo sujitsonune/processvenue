@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: me-api-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_PATH=/app/data/database.sqlite
+      - JWT_SECRET=${JWT_SECRET:-change-this-in-production}
+      - API_KEY=${API_KEY:-change-this-in-production}
+      - FRONTEND_URL=${FRONTEND_URL:-http://localhost}
+      - LOG_LEVEL=info
+    volumes:
+      - backend_data:/app/data
+      - backend_logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api/health', (res) => process.exit(res.statusCode === 200 ? 0 : 1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  frontend:
+    build: ./frontend
+    container_name: me-api-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    environment:
+      - REACT_APP_API_URL=${REACT_APP_API_URL:-http://localhost:3000}
+
+  # Optional: Add a database service for production
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: me-api-postgres
+  #   environment:
+  #     - POSTGRES_DB=me_api_playground
+  #     - POSTGRES_USER=apiuser
+  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-secure-password}
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   restart: unless-stopped
+  #   ports:
+  #     - "5432:5432"
+
+volumes:
+  backend_data:
+    driver: local
+  backend_logs:
+    driver: local
+  # postgres_data:
+  #   driver: local
+
+networks:
+  default:
+    name: me-api-network

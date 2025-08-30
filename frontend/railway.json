@@ -3,6 +3,7 @@
     "builder": "DOCKERFILE"
   },
   "deploy": {
-    "dockerfile": "Dockerfile"
+    "dockerfile": "frontend/Dockerfile",
+    "dockerContext": "frontend"
   }
 }

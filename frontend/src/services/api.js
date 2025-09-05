@@ -7,7 +7,7 @@ const api = axios.create({
     import.meta.env.VITE_API_URL ||
     (import.meta.env.MODE === "production"
       ? "https://web-production-ebc5.up.railway.app/api"
-      : "http://localhost:3000/api"),
+      : "https://web-production-ebc5.up.railway.app/api"),
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",

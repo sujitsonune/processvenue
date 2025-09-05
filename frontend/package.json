@@ -2,6 +2,7 @@
   "name": "me-api-playground-frontend",
   "version": "1.0.0",
   "description": "Frontend interface for Me-API Playground",
+  "type": "module",
   "private": true,
   "dependencies": {
     "react": "^18.2.0",

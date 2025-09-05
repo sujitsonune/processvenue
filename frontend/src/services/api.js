@@ -6,7 +6,7 @@ const api = axios.create({
   baseURL:
     import.meta.env.VITE_API_URL ||
     (import.meta.env.MODE === "production"
-      ? "https://processvenue-backend.railway.app/api"
+      ? "https://web-production-ebc5.up.railway.app/api"
       : "http://localhost:3000/api"),
   timeout: 10000,
   headers: {
